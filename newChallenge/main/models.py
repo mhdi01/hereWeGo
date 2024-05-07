@@ -84,6 +84,7 @@ class Comments(models.Model):
     comment = models.ForeignKey(to='self', on_delete=models.CASCADE, blank=True, null=True)
     content = models.TextField(blank=False, null=False)
     created_ts =  models.DateTimeField(auto_now_add=True) 
+    is_deleted = models.BooleanField(default=False, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Comments'

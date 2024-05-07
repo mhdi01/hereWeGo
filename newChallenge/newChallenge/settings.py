@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'main.apps.MainConfig',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +53,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'newChallenge.urls'
+
+SILENCED_SYSTEM_CHECKS = ['admin.E410', 'fields.E304']
 
 TEMPLATES = [
     {
@@ -99,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'main.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
