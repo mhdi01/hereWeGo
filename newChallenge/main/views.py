@@ -22,25 +22,23 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class UserAdsView(generics.ListAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = AdSerializer
-    
-    def get_queryset(self, *args, **kwargs):
-        user_id = self.kwargs['user_id']
-        try:
-            user = User.objects.get(user_id)
-        except Exception as e:
-            raise Http404("User not found")
-        
-        ads = Ads.objects.filter(user=user, is_active=True).iterator()
-        return ads
-
 class AdsGeneralView(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = AdSerializer
-    queryset = Ads.objects.all()
+    queryset = Ads.objects.filter(is_deleted=False).order_by('-created_ts')
     
+
+class RetrieveAdView(generics.RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = AdSerializer
+    
+    def get_queryset(self):
+        try:
+            ad = Ads.objects.get(id=self.kwargs['ad_id'])
+        except Exception as e:
+            print(e)
+            raise Http404
+        return ad
 
 class CreateAdView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -115,4 +113,4 @@ class ListCommentsView(generics.ListAPIView):
             print(e)
             raise Http404
         
-        return Comments.objects.filter(ad=ad).iterator()
+        return Comments.objects.filter(ad=ad)
