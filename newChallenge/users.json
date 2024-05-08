@@ -1,0 +1,26 @@
+[
+    {
+        "model": "main.user",
+        "fields": {
+            "email": "admin1@gmail.com",
+            "password": "123123333m",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.user",
+        "fields": {
+            "email": "admin2@gmail.com",
+            "password": "123123333m",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.user",
+        "fields": {
+            "email": "admin3@gmail.com",
+            "password": "123123333m",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    }
+]

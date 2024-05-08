@@ -1,0 +1,56 @@
+[
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 1,
+            "ad": 1,
+            "content": "comment1",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 1,
+            "ad": 2,
+            "content": "comment2",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 2,
+            "ad": 1,
+            "content": "comment3",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 2,
+            "ad": 2,
+            "content": "comment4",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 3,
+            "ad": 1,
+            "content": "comment5",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "main.comments",
+        "fields": {
+            "user": 3,
+            "ad": 2,
+            "content": "comment6",
+            "created_ts": "2024-05-01T00:00:00Z"
+        }
+    }
+]
