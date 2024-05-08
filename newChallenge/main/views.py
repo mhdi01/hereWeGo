@@ -10,8 +10,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-from .models import User
-from .serializers import RegisterSerializer
+from .models import User, Ads, Comments
+from .serializers import RegisterSerializer, AdSerializer, ModifyAdSerializer, CreateCommentSerializer \
+    , CommentSerializer
 
 
 # Create your views here.
@@ -19,3 +20,99 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+
+class UserAdsView(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = AdSerializer
+    
+    def get_queryset(self, *args, **kwargs):
+        user_id = self.kwargs['user_id']
+        try:
+            user = User.objects.get(user_id)
+        except Exception as e:
+            raise Http404("User not found")
+        
+        ads = Ads.objects.filter(user=user, is_active=True).iterator()
+        return ads
+
+class AdsGeneralView(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = AdSerializer
+    queryset = Ads.objects.all()
+    
+
+class CreateAdView(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ModifyAdSerializer
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        if not 'user' in request.data:request.data['user'] = user.id
+        return super().post(request, *args, **kwargs)
+    
+
+class UpdateAdView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ModifyAdSerializer
+    def get_object(self):
+        try:
+            return Ads.objects.get(id=self.kwargs['ad_id'])
+        except Exception as e:
+            print(e)
+            raise Http404
+        
+    def patch(self, request, *args, **kwargs):
+        user = self.request.user
+        if not 'user' in request.data: request.data['user'] = user.id
+        return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        user = self.request.user
+        if not 'user' in request.data: request.data['user'] = user.id
+        return super().put(request, *args, **kwargs)
+
+
+class DeleteAdView(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serialzer_class = ModifyAdSerializer
+
+    def get_object(self):
+        try:
+            return Ads.objects.get(id=self.kwargs['ad_id'])
+        except Exception as e:
+            print(e)
+            raise Http404
+        
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_deleted = True
+        instance.save()
+        return Response(status=200)
+    
+class CreateCommentView(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CreateCommentSerializer
+    
+    def post(self, request, ad_id, *args, **kwargs):
+        user = self.request.user
+        try:
+            ad = Ads.objects.get(id=ad_id)
+        except Exception as e:
+            print(e)
+            raise Http404
+        if not 'ad' in request.data: request.data['ad'] = ad.id
+        if not 'user' in request.data: request.data['user'] = user.id
+        return super().post(request, *args, **kwargs)
+    
+class ListCommentsView(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = CommentSerializer
+    def get_queryset(self, *args, **kwargs):
+        ad_id = self.kwargs['ad_id']
+        try:
+            ad = Ads.objects.get(id=ad_id)
+        except Exception as e:
+            print(e)
+            raise Http404
+        
+        return Comments.objects.filter(ad=ad).iterator()

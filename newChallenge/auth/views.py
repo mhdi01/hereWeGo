@@ -10,8 +10,9 @@ class MyObtainTokenPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-        request.data['email'] = request.data['email'].lower()
-        serializer = self.get_serializer(data=request.data)
+        mutable_data = request.data.copy()
+        mutable_data['email'] = request.data['email'].lower()
+        serializer = self.get_serializer(data=mutable_data)
 
         try:
             serializer.is_valid(raise_exception=True)
