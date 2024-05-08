@@ -44,6 +44,13 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+8. **load static data**
+```bash
+python manage.py loaddata users
+python manage.py loaddata ads
+python manage.py loaddata comments
+```
+
 ## Usage
 
 **Running the Development Server**
